@@ -1,7 +1,7 @@
 An assistant for semi-auotmated grading of Python programming assignments.  
 
 This tool can
-  - help adminster student submissions  
+  - adminster student submissions  
   - automatically assign a point score based on unit tests  
   - compile feedback into a Moodle-compatible format.
 
