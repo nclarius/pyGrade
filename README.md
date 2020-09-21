@@ -1,4 +1,4 @@
-An assistant for semi-auotmated evaluation of programming assignments in Python.  
+An assistant for semi-auotmated grading of Python programming assignments.  
 
 This tool can
   - help adminster student submissions  
