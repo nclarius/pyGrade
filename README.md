@@ -7,6 +7,7 @@ This tool can
   
  ![pyGrade -- submission overview](doc/img/pyGrade_1.png)
  ![pyGrade -- test results](doc/img/pyGrade_2.png)
+  ![pyGrade -- feedback](doc/img/pyGrade_3.png)
 
 At the moment, pyGrade is not publicly accessible. If you are interested, please contact me.
 
