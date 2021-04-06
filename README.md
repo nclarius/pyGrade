@@ -5,7 +5,6 @@ This tool can
   - automatically assign a point score based on unit tests  
   - compile feedback into a Moodle-compatible format.
   
- ![pyGrade -- submission overview](doc/img/pyGrade_1.png)
  ![pyGrade -- test results](doc/img/pyGrade_2.png)
   ![pyGrade -- feedback](doc/img/pyGrade_3.png)
 
