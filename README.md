@@ -11,4 +11,4 @@ This tool can
 
 At the moment, pyGrade is not publicly accessible. If you are interested, please contact me.
 
-© Natalie Clarius <natalie.clarius@student.uni-tuebingen.de>  
+© Natalie Clarius \<<natalie.clarius@student.uni-tuebingen.de>\>  
