@@ -355,7 +355,7 @@ class Assignment(object):
     def next_student(self, n):
         # todo (low prio): index no longer needed, use ID instead
         # verify that previous student is done
-        if not reload:
+        if not self.reload:
             if not self.verify_done():
                 return
 
@@ -609,7 +609,7 @@ class Assignment(object):
                 main_file = importlib.reload(main_file)
                 print(helpers.color("green", "SUCCESS: Imported module " + self.main_file_name))
                 print()
-        reload = False
+        self.reload = False
 
         # todo (low prio): part of it must come before importing file in order to detect crashes
         # update student data
