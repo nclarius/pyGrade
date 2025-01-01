@@ -77,15 +77,11 @@ def get_grader():
     :return: name of the grader
     :rtype: str
     """
-    match getpass.getuser():
-        case "natalie":
-            return "Natalie"
-        case "maxim":
-            return "Maxim"
-        case "johannes" | "jdellert":
-            return "Johannes"
-        case _:
-            print_error("Username not found")
+    username2grader = {"natalie": "Natalie", "maxim": "Maxim", "johannes": "Johannes", "jdellert": "Johannes"}
+    if getpass.getuser() in username2grader:
+        return username2grader[getpass.getuser().lower()]
+    else:
+        print_error("Username not found")
 
 
 def open_by_grader_preference(filepath):
