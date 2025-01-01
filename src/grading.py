@@ -84,7 +84,7 @@ thresholds = []
 
 
 def main():
-    global end_grading
+    global a, end_grading
 
     # show greeting message
     greeting()
