@@ -85,7 +85,7 @@ def get_grader():
         case "johannes" | "jdellert":
             return "Johannes"
         case _:
-            print_color("red", "ERROR: Username not found")
+            print_error("Username not found")
 
 
 def open_by_grader_preference(filepath):
@@ -168,7 +168,7 @@ def color(col, str):
             pfx = '\033[31m'
 
         case _:
-            print_color("red", "ERROR: Color " + col + " does not exist")
+            print_error("Color " + col + " does not exist")
             return
 
     # end sequence
@@ -182,6 +182,19 @@ def print_color(col, str):
 
 def input_color(col, str):
     return input(color(col, str))
+
+def print_success(str):
+    print_color("green", "SUCCESS: " + str)
+
+def print_info(str):
+    print_color("yellow", "INFO: " + str)
+
+def print_warning(str):
+    print_color("orange", "WARNING: " + str)
+
+def print_error(str):
+    print_color("red", "ERROR: " + str)
+
 
 
 ###################

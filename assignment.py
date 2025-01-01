@@ -131,7 +131,7 @@ class Assignment(object):
         self.test_files = [filename[:-3] for filename in os.listdir(self.path_solution)
                       if filename.startswith("test_") and filename.endswith(".py")]
         if not self.test_files:
-            helpers.print_color("orange", "WARNING: No test files found in '" + self.path_solution + "'")
+            helpers.print_warning("No test files found in '" + self.path_solution + "'")
             paths_found = False
 
         # open files
@@ -161,11 +161,11 @@ class Assignment(object):
         not_found = [pathname.__name__ for pathname in paths if pathname == ""]
         if not not_found:
             paths_found = True
-            helpers.print_color("green", "SUCCESS: All paths found\n")
+            helpers.print_success("All paths found\n")
         else:
             for pathname in not_found:
                 paths_found = False
-                helpers.print_color("red", "ERROR: Path " + pathname + " not found")
+                helpers.print_error("Path " + pathname + " not found")
 
 
     def obtain_files(self, silent=False):
@@ -175,7 +175,7 @@ class Assignment(object):
             print("Obtaining files...")
 
         if not isfile(self.path_studentlist_file):
-            helpers.print_color("red", "ERROR: self.studentlist.tsv not found")
+            helpers.print_error("self.studentlist.tsv not found")
             return
 
         # obtain notes
@@ -250,7 +250,7 @@ class Assignment(object):
                                  for name in self.raw]))
 
         if not silent:
-            helpers.print_color("green", "SUCCESS: All files found\n")
+            helpers.print_success("All files found\n")
 
 
     def obtain_tasks(self):
@@ -299,11 +299,11 @@ class Assignment(object):
                 self.tasks_total_tests_bonus =  float(sum([points for points in [val[1] for val in self.tasks.values() if val[2]]]))
                 if self.tasks_total[0] != self.tasks_total_tests:
                     tasks_warning = True
-                    helpers.print_color("orange", "WARNING: Total points are specified as " + helpers.inflect(self.tasks_total, "points, ") +
+                    helpers.print_warning("Total points are specified as " + helpers.inflect(self.tasks_total, "points, ") +
                                 "but points specified in task dict sum up to " + helpers.inflect(self.tasks_total_tests, "points"))
                 if self.tasks_total[1] != self.tasks_total_tests_bonus:
                     tasks_warning = True
-                    helpers.print_color("orange", "WARNING: Total bonus points are specified as " + helpers.inflect(self.tasks_total, "points, ") +
+                    helpers.print_warning("Total bonus points are specified as " + helpers.inflect(self.tasks_total, "points, ") +
                                 "but bonus points specified in task dict sum up to " + helpers.inflect(self.tasks_total_tests, "points"))
 
 
@@ -320,7 +320,7 @@ class Assignment(object):
 
                 if len(self.tasks)-1 != len(tasks_test):
                     tasks_warning = True
-                    helpers.print_color("orange", "WARNING: " + \
+                    helpers.print_warning("" + \
                                 "Points are set up for " + helpers.inflect(len(self.tasks), "tasks, ") +
                                 "but test file containts unit tests for " + helpers.inflect(len(tasks_test), "tasks"))
                 for i, case in enumerate(suite._tests):
@@ -329,7 +329,7 @@ class Assignment(object):
                     if not case_name.startswith("TestRun"):
                         if tasks_test[i+1] != self.tasks[i+1][1]:
                             tasks_warning = True
-                            helpers.print_color("orange", "WARNING: " +
+                            helpers.print_warning("" +
                                         "Points for Task " + str(i+1) + " (" + self.tasks[i+1][0] + ") " + \
                                         "are specified as " + helpers.inflect(self.tasks[i+1][1], "points, ") +\
                                         "but unit tests sum up to " + helpers.inflect(tasks_test[i+1], "points"))
@@ -347,7 +347,7 @@ class Assignment(object):
             sys.path_importer_cache[self.main_file_name] = None
             importlib.invalidate_caches()
 
-            helpers.print_color("green", "SUCCESS: Tasks initialized")
+            helpers.print_success("Tasks initialized")
             print(helpers.tasks2str(self.tasks, tasks_count, self.tasks_total))
         except Exception as err:
             print(traceback.print_exc(err))
@@ -405,7 +405,7 @@ class Assignment(object):
         #         break
         # assigned_grader = graders[pos]
         # if not assigned_grader == helpers.get_grader():
-        #     helpers.print_color("orange", "WARNING: This is not your student.")
+        #     helpers.print_warning("This is not your student.")
         #     answer = input(helpers.color("orange", "Are you sure you want to continue? "))
         #     if answer in ["n", "no", "r", "return"]:
         #         return
@@ -429,7 +429,7 @@ class Assignment(object):
                 found = True
                 break
         if not found:
-            helpers.print_color("red", "ERROR: Student " + raw_name + " was not found in self.studentlist")
+            helpers.print_error("Student " + raw_name + " was not found in self.studentlist")
             return
 
         # change to raw directory
@@ -486,7 +486,7 @@ class Assignment(object):
                         s = None
                         return
                     case _:
-                        helpers.print_color("red", "ERROR: Not a valid option")
+                        helpers.print_error("Not a valid option")
 
         # set remaining variables
         if merge:  # take over data from existing entry
@@ -590,7 +590,7 @@ class Assignment(object):
             except Exception as e:
                 import_main_file = False
                 crash = True
-                helpers.print_color("red", "ERROR: Exception - failed to import module " + self.main_file_name)
+                helpers.print_error("Exception - failed to import module " + self.main_file_name)
                 crash_note = traceback.format_exc().splitlines()[-1]
                 helpers.print_color("red", crash_note)
                 print()
@@ -822,7 +822,7 @@ class Assignment(object):
             # print(failure_summary + "\n")
             print(test_summary)
             self.points_total(self.s)
-            helpers.print_color("green", "SUCCESS: All tests done\n")
+            helpers.print_success("All tests done\n")
             print(helpers.points2str(self.s, self.tasks, self.tasks_total))
             self.s.done_tests = True
             self.export_results()
@@ -1083,7 +1083,7 @@ class Assignment(object):
             helpers.print_feedback(self.feedback(), st)
 
         if not silent:
-            helpers.print_color("green", "SUCCESS: Generated feedback string")
+            helpers.print_success("Generated feedback string")
 
 
     def comment_crashes(self):
@@ -1748,7 +1748,7 @@ class Assignment(object):
                 self.feedback(st)
             self.compute_scores()
         if not silent:
-            helpers.print_color("green", "SUCCESS: Saved changes in current student")
+            helpers.print_success("Saved changes in current student")
             self.compute_scores()
 
         # results.tsv
@@ -1761,7 +1761,7 @@ class Assignment(object):
                     row[field] = getattr(st, field)
                 writer.writerow(row)
         if not silent:
-            helpers.print_color("green", "SUCCESS: Exported " + helpers.inflect(len(self.students), "entries ") +
+            helpers.print_success("Exported " + helpers.inflect(len(self.students), "entries ") +
                         "from self.students dict into results.tsv")
 
         # self.studentlist.tsv
@@ -1783,7 +1783,7 @@ class Assignment(object):
                     row[key] = self.studentlis[id][key]
                 writer.writerow(row)
         if not silent:
-            helpers.print_color("green", "SUCCESS: Exported " + helpers.inflect(len(self.studentlis), "entries ") +
+            helpers.print_success("Exported " + helpers.inflect(len(self.studentlis), "entries ") +
                         "from self.studentlist dict into self.studentlist.tsv")
 
 
@@ -1793,7 +1793,7 @@ class Assignment(object):
         self.export_results()
 
         if self.pending():
-            helpers.print_color("orange", "WARNING: " + str(len(self.pending())) + " self.students are marked as not yet graded.")
+            helpers.print_warning("" + str(len(self.pending())) + " self.students are marked as not yet graded.")
             match input("Are you sure you want to proceed? ('y'/'n') "):
                 case "y" | "yes":
                     pass
@@ -1801,7 +1801,7 @@ class Assignment(object):
                     return
 
         if not exists(self.path_moodle_file_raw):
-            helpers.print_color("red", "ERROR: results_moodle_raw.csv not found")
+            helpers.print_error("results_moodle_raw.csv not found")
             return
 
         with open(self.path_moodle_file_raw, "r", encoding="utf-8-sig", newline="") as raw:
@@ -1818,7 +1818,7 @@ class Assignment(object):
                     full_name = row["Vollständiger Name"]
                     moodle_ids = [self.students[id].moodle_id for id in self.students]
                     if moodle_id not in moodle_ids:
-                        helpers.print_color("orange", "WARNING: " + full_name + " (moodle id " + moodle_id + ") "
+                        helpers.print_warning("" + full_name + " (moodle id " + moodle_id + ") "
                                     "submitted but was not found in self.students dict")
                         continue
                     st = self.students[self.lookup_student(full_name)["ID"]]
@@ -1842,7 +1842,7 @@ class Assignment(object):
                 f.write(self.studentlist[sid]["Last name"] + "\t" +
                         self.studentlist[sid]["First name"] + "\t" +
                         self.studentlist[sid]["MatrNr"] + "\n")
-        helpers.print_color("green", "SUCCESS: Wrote passing self.students (" +
+        helpers.print_success("Wrote passing self.students (" +
                     str(len(passed)) + " passed/" + str(len(applicable)) + " applicable" +
                     ") to " + filename)
 
@@ -1911,7 +1911,7 @@ class Assignment(object):
             for name in [full_name, first_name, last_name]:
                 if helpers.ascii(raw_name.lower()) == helpers.ascii(name.lower()):
                     return self.studentlist[id]
-        helpers.print_color("red", "ERROR: name " + raw_name + " was not found in self.studentlist")
+        helpers.print_error("name " + raw_name + " was not found in self.studentlist")
 
 
     def print_student(self):
@@ -1945,7 +1945,7 @@ class Assignment(object):
                     valid_input = True
                 case answer if helpers.ascii(answer.lower()) in [helpers.ascii(name.lower()) for name in self.names]:
                     if self.names.count("answer") > 1:
-                        helpers.print_color("red", "ERROR: There is more than one student of this name - "
+                        helpers.print_error("There is more than one student of this name - "
                                         "please specify the full name or the number")
                         continue
                     else:
@@ -1953,6 +1953,6 @@ class Assignment(object):
                         idx = self.raw.index(full_name) + 1
                         valid_input = True
                 case _:
-                    helpers.print_color("red", "ERROR: Not a valid name or number")
+                    helpers.print_error("Not a valid name or number")
         print("Going on to student #" + str("{0:02d}".format(idx)) + " (" + self.raw[idx - 1] + ")...")
         self.next_student(idx)

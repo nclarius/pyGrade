@@ -269,14 +269,14 @@ def next_action():
     
         # not specified
         case _:
-            print_color("red", "ERROR: Action not specified")
+            print_error("Action not specified")
 
 def ask_ex_nr():
     while True:
         if (ex_nr := input("Enter the two-digit number of the exercise (example: '00'): ")).isdigit():
             return ex_nr
         else:
-            print_color("red", "ERROR: Not a valid exercise number")
+            print_error("Not a valid exercise number")
 
 if __name__ == '__main__':
     main()
