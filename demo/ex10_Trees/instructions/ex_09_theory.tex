@@ -1,0 +1,204 @@
+\input{../../templates/exercises_preamble.tex}
+
+\usepackage[linguistics]{forest} %for syntax trees
+
+\begin{document}
+	
+%Title
+\def \sheetnr {09}
+\def \sheettitle {Trees and X-bar theory:\\Theoretical background}
+\def \handedout {Monday 22\textsuperscript{nd} July, 14:00}
+\def \tosubmit {Monday 29\textsuperscript{th} July, 14:00}
+\def \totalpoints {8}
+\setuptitle
+%\title{Trees and X-bar theory:\\Theoretical background}
+%\maketitle
+
+X-bar theory imposes constraints on the form of phrase structure trees. One of the core assumptions is that besides the usual syntactic categories like noun, adjective, complementizer, ..., each node in the syntax tree (where, broadly speaking, each such node makes up a so-called constituent) has a so-called projection level, which, roughly speaking, represents how grammatically "complete" a part of a sentence is at that point. X-bar theory then specifies rules on how these constituents can combine to make a well-formed tree. For example, each phrase must have a uniquely determined head, adjuncts are inserted at the level of bar projections, and some heads combine with complements to form the next projection. The exact terminology and rules are given below.\\
+
+In an X-bar tree, the label of each non-terminal node encodes two kinds of information:\\[-1.25\baselineskip]
+\begin{enumerate}[label=\textbullet]\itemsep-.5ex
+	\item the syntactic category (e.g. N for noun, P for preposition, A for adjective, ...)
+	\item the projection level -- most variants of X-bar theory assume the following three projection levels:\\[-1.5\baselineskip]
+	\begin{enumerate}[label={--}]\itemsep0pt
+		\item level 2: phrase (written as XP or X$''$ or $\overline{\overline{\mbox{X}}}$ or X$^2$)
+		\item level 1: bar (written as X$'$ or $\overline{\mbox{X}}$ or X$^1$)
+		\item level 0: head (written as X or X$^0$)
+	\end{enumerate}
+\end{enumerate}
+E.g., the label "AdvP" encodes that the node is of the syntactic category "adverb" and projection level 2, i.e. an adverb phrase, and "N" means that the node is of the category "noun" and projection level 0, i.e. a nominal head.\\
+In order to be able to handle these node labels more easily in a program, we specify that the label name is a string where the first characters are the syntactic category and as the last character we write the projection level as a number; e.g. the adverb phrase "AdvP" is encoded as \texttt{"Adv2"} and the noun head "N" is encoded as \texttt{"N0"}.\\
+
+Some notes on notation and terminology:\\
+When speaking about the abstract structure of X-bar trees in general without referring to particular instances of these trees, we use variables (X, Y, ...) for the syntactic category, where a variable could stand for any category (N, A, D, ...) but same variable names means that the nodes must be of the same category; different variable names allow the categories to be different or the same.\\
+A node is said to branch \textbf{binary} iff it has two children, and \textbf{unary} iff it has one child. A node is called a \textbf{non-terminal} (or \textbf{branching}) node iff it has children, and a \textbf{terminal} node (or \textbf{leaf}) iff it has no children. In a linguistic syntax tree, the terminal nodes are words, and the non-terminal nodes are intermediate projections encoding a combination of syntactic category and projection level as described above. The top-most node is called the \textbf{root} of the tree.\\
+We sometimes use triangles when we don't want to spell out the full structure of a tree (e.g., because we are not interested in the precise structure of every subtree); the triangle is like a "..." stating that there is some more in between which is, however, not shown in more detail.
+
+\pagebreak
+A constituent YP is called (examples see page after next one) a
+\begin{enumerate}[label=\textbullet]\itemsep0pt
+	\item \textbf{specifier} w.r.t. the XP iff it is daughter to XP and sister to X':\\
+	\begin{forest}
+		[XP [YP\\(specifier)] [X']]
+	\end{forest}
+	\item \textbf{adjunct} or \textbf{modifier} w.r.t. the XP (or X') iff it is daughter to X' and sister to X':\\
+	\begin{forest}
+		[X' [YP\\(adjunct)] [X']]
+	\end{forest}
+	\hspace{1cm}
+	\begin{forest}
+	[X' [X'] [YP\\(adjunct)] ]
+	\end{forest}
+	\item \textbf{complement} w.r.t. the XP (or X) iff it is daugther to X' and sister to X:\\
+	\begin{forest}
+	[X' [X] [YP\\(complement)] ]
+	\end{forest}
+\end{enumerate}
+
+\pagebreak
+The phrase structure rules of X-bar theory are given as follows\footnote{For reasons of simplicity, we assume that there occur no specifiers on the right of an X' or complements on the left of a head, and that there are no further constraints on the combinations of the categories (for example, what complement phrases verb heads can go with).}:
+\begin{enumerate}[label=\textbullet]
+\item A phrase of category X (XP) branches\\[-1.25\baselineskip]
+\begin{enumerate}[label={--}]\itemsep0pt
+	\item binary into a specifier phrase of any category Y (YP) on the left and a bar level of the same category (X') on the right or
+	\item just the X'.
+\end{enumerate}
+\begin{forest}
+	[XP [YP] [X'] ]
+\end{forest}
+\hspace{1cm}
+\begin{forest}
+	[XP [X'] ]
+\end{forest}
+
+\item An X' (bar projection of category X) branches\\[-1.25\baselineskip]
+\begin{enumerate}[label={--}]\itemsep0pt
+	\item binary into an adjunct of any category Y (YP) on the left and new bar projection of the same category (X') on the right, or
+	\item binary into a new X' projection on the left and an adjunct YP on the right, or
+	\item binary into a head of the same category (X) and a complement phrase of any category Y (YP), or
+	\item unary into just the head (X).
+\end{enumerate}
+\begin{forest}
+	[X' [YP] [X'] ]
+\end{forest}
+\hspace{1cm}
+\begin{forest}
+	[X' [X'] [YP] ]
+\end{forest}
+\hspace{1cm}
+\begin{forest}
+	[X' [X] [YP] ]
+\end{forest}
+\hspace{1cm}
+\begin{forest}
+	[X' [X] ]
+\end{forest}
+
+\item A head X branches unary into a terminal word z:\\
+\hspace{.75cm}
+\begin{forest}
+	[X [z] ]
+\end{forest}
+
+\item A terminal node (a word) is just that:\\
+\begin{forest}
+    [z]
+\end{forest}
+
+
+\end{enumerate}
+
+\pagebreak
+Some examples:
+\begin{enumerate}[label=\textbullet]\itemsep0pt
+	\item The following trees are well-formed according to the rules of X-bar theory:\\[\baselineskip]
+	\begin{forest}
+	[NP
+		[DP [D' [D [the]]]]
+		[N'
+			[N' [N [cat]]]
+			[PP [P'
+				[P [on]]
+				[NP [DP [D' [D [the]]]] [N' [N [mat]]]]
+			]]
+		]
+	]
+	\end{forest}
+	\hspace{1cm}
+	\begin{forest}
+		[N'
+			[AP [A' [A [small]]]]
+			[N'
+				[AP [A' [A [black]]]]
+				[N' [N [cat]]]
+			]
+		]
+	\end{forest}
+	\hspace{1cm}
+	\begin{forest}
+	[V'
+		[V [read]]
+		[NP [a book,roof]]
+	]
+	\end{forest}
+	\hspace{1cm}
+	\begin{forest}
+	[Adv [quickly]]
+	\end{forest}
+	\vspace{.25\baselineskip}
+	
+	More precisely:\\
+	The first tree is a phrase of category N with a DP as a specifier (daughter to NP, sister to N'), a PP as an adjunct (daughter to N', sister to N') on the right and no complement (since the N head has no sister). The DP specifier itself has no specifiers, adjuncts or complements; the PP complement has no specifier or adjunct, but an NP complement; the latter has a DP specifier (which itself has no specifiers, adjuncts or complements) and no adjuncts or complements.\\
+	The second tree is a bar of category N with no complement and two AP adjuncts on the left, which themselves both have no specifiers, adjuncts or complements. We can not talk about the specifiers of the N' because we don't have the full NP.\\
+	The third tree is a V' with an NP complement (daughter to V', sister to the V head). We were too lazy to spell out what the NP looks like internally so we used a triangle to abbreviate, but of course the NP does have an internal structure, it's just not shown in the picture.\\
+	The fourth tree is an adverb head.\\
+	The constituents of the tree (e.g. the specifier DP and the adjunct PP in the first tree) are themselves well-formed phrases of X-bar theory. This needs to be checked recursively; if some part of the tree is not well-formed, the tree as a whole isn't either.
+	\pagebreak
+	
+	\item The following trees are not well-formed because the first one has no bar level (NP branches directly into N) and the second one has two (N' branches into another N' although there is no adjunct or complement present):\\[\baselineskip]
+	\begin{forest}
+	[NP
+		[DP [D' [D [the]]]]
+		[N [cat]]
+	]
+	\end{forest}
+	\hspace{1cm}
+	\begin{forest}
+	[NP
+		[DP [D' [D [the]]]]
+		[N' [N' [N [cat]]]]
+	]
+	\end{forest}
+	\vspace{.25\baselineskip}
+
+	\item The following tree is not well-formed because inside the DP, the syntactic category of the phrase and the bar don't match (DP branching into a P'):\\[\baselineskip]
+	\begin{forest}
+	[NP
+		[DP [P' [P [on]]]]
+		[N' [N [cat]]]
+	]
+	\end{forest}
+	\vspace{.25\baselineskip}
+
+	\item The following trees are not well-formed because the first one has two heads (N' branching into two Ns) and the second one has no head at all:\\[\baselineskip]
+	\begin{forest}
+	[NP
+		[DP [D' [D [the]]]]
+		[N' [N [cat]] [N [cat]]]
+	]
+	\end{forest}
+	\hspace{1cm}
+	\begin{forest}
+	[NP
+		[DP [D' [D [the]]]]
+		[N' ]
+	]
+	\end{forest}
+	\vspace{.25\baselineskip}
+	
+\end{enumerate}
+\vspace{.5\baselineskip}
+You will find similar and more examples in \texttt{test\_ex\_09.py}.\\ \\
+
+
+\end{document}

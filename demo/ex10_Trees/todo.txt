@@ -1,0 +1,3 @@
+- tests: include test cases that need actual recursion (fail when merely checking for node label)
+- forgot student data form in handout
+- description of is_head_projection(): make an explicit reference to is_head_structure() instead of "unary branches into a terminal node"
