@@ -735,12 +735,12 @@ class Assignment(object):
                         test_name = test.id()[test.id().index(".test_")+1:]
                         test_pnts = self.points_test(test)
                         failures[case_name][test_name] = []
-                        if self.test_runonly(test):
+                        if self.runonly_test(test):
                             # todo (medium prio): better handling of runonly tests (expected/actual output)
                             print("Running " + case_name + "/" + test_name)
                             # print("--------------\nBegin program output\n--------------")
                         result = test.run()
-                        if self.test_runonly(test):
+                        if self.runonly_test(test):
                             print("Done running " + case_name + "/" + test_name + "\n")
                             # print("--------------\nEnd program output\n--------------\n")
                         if result:
@@ -751,14 +751,14 @@ class Assignment(object):
                             if len_failures + len_errors == 0:
                                 test_summary += "  - " + test_name + ": "
                                 test_summary += helpers.color("green", "succeeded")\
-                                    if not self.test_runonly(test) else helpers.color("orange", "visual inspection required")
+                                    if not self.runonly_test(test) else helpers.color("orange", "visual inspection required")
                                 test_summary += " (" + str(test_pnts) + "/" + str(test_pnts) + " pts)\n"
                                 if not self.s.done_tests:
                                     self.s.points[i+1] += test_pnts
                             else:
                                 test_summary += "  - " + test_name + ": "
                                 test_summary += helpers.color("red", "failed")\
-                                    if not self.test_runonly(test) else helpers.color("orange", "visual inspection required")
+                                    if not self.runonly_test(test) else helpers.color("orange", "visual inspection required")
                                 test_summary += " (" + str(0.0) + "/" + str(test_pnts) + " pts)\n"
                                 for error in result.errors:
                                     # error = str(error)
@@ -904,6 +904,12 @@ class Assignment(object):
             return float(test_doc[test_doc_points_start:test_doc_points_end])
         else:
             return 0.5
+    
+    def runonly_test(self, test):
+        test_doc = test._testMethodDoc
+        if test_doc is None:
+            test_doc = ""
+        return ":runonly: True" in test_doc
 
 
     def points_total(self, st):
