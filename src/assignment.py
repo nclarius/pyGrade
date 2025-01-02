@@ -14,6 +14,7 @@ from importlib import import_module
 from os.path import *
 
 debug = True
+demo = True
 
 
 class Assignment(object):
@@ -21,8 +22,8 @@ class Assignment(object):
     def __init__(self, ex_nr):
         # paths and files
         self.path_script = abspath(__file__)
-        self.path_exercises = join(join(dirname(dirname(self.path_script)), "demo"), "exercises")
-        # self.path_exercises = join(dirname(dirname(dirname(self.path_script))), "exercises")
+        self.path_data = join(dirname(dirname(dirname(self.path_script)))) if not demo else join(join(dirname(dirname(self.path_script)), "demo"))
+        self.path_exercises = join(self.path_data, "exercises")
         self.ex_nr = ex_nr
         self.path_ex = ""
         self.path_solution = ""
