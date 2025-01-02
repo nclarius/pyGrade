@@ -55,11 +55,11 @@ class Assignment(object):
         self.view_only = False
         self.reload = False
         # field_names_results = vars(Student(self)).keys()  # field names for results file
-        field_names_results = ["id", "last_name", "first_name", "matr_nr", "moodle_id",
+        self.field_names_results = ["id", "last_name", "first_name", "matr_nr", "moodle_id",
                                     "points", "total_points", "crashes", "plagiarism", "notes", "grader",
                                     "done_tests", "done_comment", "done_grading", "feedback"]
         #                           "path_raw_dirname", "path_raw", "path_graded_dirname", "path_graded", "path_comment", "feedback"]
-        field_names = []
+        self.field_names = []
 
         # tasks and points
         self.tasks = {}  # tasks with total points; format {task_nr: ("task_name", pnts, is_bonus), ...}
@@ -1757,11 +1757,11 @@ class Assignment(object):
 
         # results.tsv
         with open(self.path_results_file, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=field_names_results, delimiter="\t")
+            writer = csv.DictWriter(f, fieldnames=self.field_names_results, delimiter="\t")
             writer.writeheader()
             for st in self.students.values():
                 row = {}
-                for field in field_names_results:
+                for field in self.field_names_results:
                     row[field] = getattr(st, field)
                 writer.writerow(row)
         if not silent:
