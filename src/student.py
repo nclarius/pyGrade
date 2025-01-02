@@ -15,8 +15,6 @@ class Student(object):
         self.id = "(no ID)"
         self.last_name = "(no last name)"
         self.first_name = "(no first name)"
-        self.matr_nr = "(no matr nr)"
-        self.moodle_id = "(no moodle ID)"
         # self.path_feedback = ""
         # results
         self.points = {}

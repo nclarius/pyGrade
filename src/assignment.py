@@ -409,7 +409,7 @@ class Assignment(object):
         #         return
 
         # create new student object
-        s = Student(self)
+        self.s = Student(self)
         view_only = False
         raw_name = self.raw[n-1].replace("'", "")
         for dirname in os.listdir(self.path_subm_raw):
@@ -419,7 +419,7 @@ class Assignment(object):
                 break
         print("\nRaw directory: " + self.s.dirname_raw)
         self.s.moodle_id = self.s.dirname_raw[self.s.dirname_raw.index("_") + 1:self.s.dirname_raw.index("_assign")]
-        self.s.index = "#{:02d}".format(idx)
+        self.s.index = "#{:02d}".format(self.raw.index(raw_name) + 1)
         found = False
         for id in self.studentlist:
             if helpers.ascii(self.studentlist[id]["First name"] + " " + self.studentlist[id]["Last name"]) == helpers.ascii(raw_name):
@@ -431,7 +431,7 @@ class Assignment(object):
             return
 
         # change to raw directory
-        os.chdir(s.path_raw)
+        os.chdir(self.s.path_raw)
         sys.path.insert(0, self.s.path_raw)
         print("Contents:")
         for filename in os.listdir(self.s.path_raw):
@@ -494,10 +494,9 @@ class Assignment(object):
         else:  # initialize student
             self.s.last_name = self.studentlist[self.s.id]["Last name"]
             self.s.first_name = self.studentlist[self.s.id]["First name"]
-            self.s.matr_nr = self.studentlist[self.s.id]["MatrNr"]
             self.s.points = {task_nr: 0.0 for task_nr in self.tasks}
             self.s.total_points = 0.0
-            self.students[self.s.id] = s
+            self.students[self.s.id] = self.s
         if not view_only:
             self.s.grader = helpers.get_grader()
 
@@ -537,12 +536,13 @@ class Assignment(object):
         self.s.dirname_graded = str(self.s.id) +\
                                 "_" + helpers.ascii(self.s.last_name).replace(" ", "-") +\
                                 "_" + helpers.ascii(self.s.first_name).replace(" ", "-")
+        self.s.path_raw = join(self.path_subm_raw, self.s.dirname_raw)
         self.s.path_graded = join(self.path_subm_graded, self.s.dirname_graded)
         if not exists(self.s.path_graded): os.makedirs(self.s.path_graded)
         sys.path.insert(0, self.s.path_graded)
         # copy all raw and resource files into graded folder
         if len(os.listdir(self.s.path_graded)) == 0:
-            for filename in os.listdir(s.path_raw):
+            for filename in os.listdir(self.s.path_raw):
                 if not filename.endswith(self.filenames_dont_open) and not exists(join(self.s.path_graded, filename)):
                     shutil.copyfile(join(self.s.path_raw, filename), join(self.s.path_graded, filename))
         # for filename in os.listdir(path_resources):
@@ -630,7 +630,7 @@ class Assignment(object):
 
         # print and save student data
         # todo (low prio): "access denied" message appearing sometimes
-        self.print_student(self)
+        self.print_student()
         if crash:
             helpers.print_color("orange", "\nWARNING: This student's code crashed while attempting to import the main file. "
                         "Scroll up for information on the error.")
@@ -642,8 +642,8 @@ class Assignment(object):
             helpers.print_color("orange", "\nWARNING: This student plagiarized their code with " +
                                  helpers.conjoin(self.s.plagiarism[0]) +
                                  ".\nNotes: " + self.s.plagiarism[1])
-        self.students[self.s.id] = s
-        backup = copy.copy(s)
+        self.students[self.s.id] = self.s
+        backup = copy.copy(self.s)
 
 
     def run_tests(self):
