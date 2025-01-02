@@ -582,7 +582,7 @@ class Assignment(object):
 
             import traceback
             try:
-                main_file = import_module(self.main_file_name)
+                self.main_file = import_module(self.main_file_name)
             # except ImportError as e:
             # except SystemExit as e:
             except Exception as e:
@@ -605,7 +605,7 @@ class Assignment(object):
             # except:
             #     # other errors: SyntaxError, NameError, TypeError
             else:
-                main_file = importlib.reload(main_file)
+                self.main_file = importlib.reload(self.main_file)
                 print(helpers.color("green", "SUCCESS: Imported module " + self.main_file_name))
                 print()
         self.reload = False
