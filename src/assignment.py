@@ -413,7 +413,7 @@ class Assignment(object):
         view_only = False
         raw_name = self.raw[n-1].replace("'", "")
         for dirname in os.listdir(self.path_subm_raw):
-            if dirname.startswith(self.raw_name):
+            if dirname.startswith(raw_name):
                 self.s.dirname_raw = dirname
                 self.s.path_raw = os.path.join(self.path_subm_raw, self.s.dirname_raw)
                 break
@@ -422,7 +422,7 @@ class Assignment(object):
         self.s.index = "#{:02d}".format(idx)
         found = False
         for id in self.studentlist:
-            if helpers.ascii(self.studentlist[id]["First name"] + " " + self.studentlist[id]["Last name"]) == helpers.ascii(self.raw_name):
+            if helpers.ascii(self.studentlist[id]["First name"] + " " + self.studentlist[id]["Last name"]) == helpers.ascii(raw_name):
                 self.s.id = id
                 found = True
                 break
