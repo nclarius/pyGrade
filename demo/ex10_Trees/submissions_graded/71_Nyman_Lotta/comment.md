@@ -1,2 +1,0 @@
-Your file could not be tested because it was not runnable (crashed with an error) and/or did not meet the requirements on the format (such as the file name). Below you find the error(s) caused by your program. Please **always** test your code to make sure that it is runnable at all, and verify that your file is in the requried format before submitting it (stick to the template!). 0 points.
-- ModuleNotFoundError: No module named 'ex_10'

@@ -21,7 +21,7 @@ class Assignment(object):
     def __init__(self, ex_nr):
         # paths and files
         self.path_script = abspath(__file__)
-        self.path_exercises = join(dirname(dirname(self.path_script)), "demo")
+        self.path_exercises = join(join(dirname(dirname(self.path_script)), "demo"), "exercises")
         # self.path_exercises = join(dirname(dirname(dirname(self.path_script))), "exercises")
         self.ex_nr = ex_nr
         self.path_ex = ""
@@ -76,6 +76,7 @@ class Assignment(object):
 
         # set up
         self.obtain_paths()
+        self.obtain_files()
         self.obtain_tasks()
         self.import_results(False, True)
 
@@ -144,7 +145,7 @@ class Assignment(object):
                 helpers.open_by_grader_preference(filename)
 
         # self.studentlist/scores
-        self.path_studentlist_file = join(self.path_exercises, "studentlist.tsv")
+        self.path_studentlist_file = join(self.path_exercises, "results.tsv")
 
         # notes/crashes/plagiarism/default comments
         self.path_notes_file = join(self.path_results, "notes.txt")
@@ -174,8 +175,13 @@ class Assignment(object):
             print("Obtaining files...")
 
         if not isfile(self.path_studentlist_file):
-            helpers.print_error("self.studentlist.tsv not found")
+            helpers.print_error("studentlist.tsv not found")
             return
+        else:
+            with open(self.path_studentlist_file, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f, delimiter="\t")
+                for row in reader:
+                    self.studentlist.update({row["ID"]: row})
 
         # obtain notes
         # todo (low prio) still working?
@@ -204,6 +210,8 @@ class Assignment(object):
                     if not line.startswith("#"):
                         moodle_name = line.split("\t")[0]
                         st = self.lookup_student(moodle_name)
+                        if not st:
+                            continue
                         comment = line.split("\t")[1].replace("\n", "")
                         crashes.append((st["ID"], comment))
 
@@ -235,18 +243,8 @@ class Assignment(object):
                     if not line.strip() == "":
                         default_comments.update({(line.split("\t"))[0]: (line.split("\t"))[1]})
 
-        # re-sort raw
-        raw_prelim = []
-        for raw_name in self.raw:
-            st = self.lookup_student(raw_name)
-            if st is not None:
-                raw_prelim.append(st)
-        self.raw = sorted(raw_prelim, key=lambda st: st["Last name"])
-        # self.raw = sorted(raw_prelim, key=lambda st: st["First name"])
-        self.raw = [st["First name"] + " " + st["Last name"] for st in self.raw]
-        # self.raw = [st["Last name"] + ", " + st["First name"] for st in self.raw]
-        names = list(itertools.chain(*[[name, self.lookup_student(name)["First name"], self.lookup_student(name)["Last name"]] \
-                                 for name in self.raw]))
+        # obtain raw submissions
+        self.raw = [raw_name[:raw_name.index("_")] for raw_name in os.listdir(self.path_subm_raw) if "_" in raw_name]
 
         if not silent:
             helpers.print_success("All files found\n")
@@ -428,7 +426,7 @@ class Assignment(object):
                 found = True
                 break
         if not found:
-            helpers.print_error("Student " + raw_name + " was not found in self.studentlist")
+            helpers.print_error("Student " + raw_name + " was not found in studentlist")
             return
 
         # change to raw directory
@@ -1872,7 +1870,7 @@ class Assignment(object):
             print("[" + str(idx + 1).zfill(2) + "]" + \
                     (helpers.color("green", " (X) ") if subm in list_graded else helpers.color("orange", " (O) ")) + subm)
             if idx + 1 in thresholds:
-                pos = self.thresholds.index(idx + 1)
+                pos = thresholds.index(idx + 1)
                 print("-------" + \
                         (" ↑ " + graders[pos] if 0 <= pos < len(graders) else "") + \
                         (" ↓ " + graders[pos + 1] if 0 <= pos + 1 < len(graders) else "") + \
@@ -1910,7 +1908,7 @@ class Assignment(object):
             for name in [full_name, first_name, last_name]:
                 if helpers.ascii(raw_name.lower()) == helpers.ascii(name.lower()):
                     return self.studentlist[id]
-        helpers.print_error("name " + raw_name + " was not found in self.studentlist")
+        helpers.print_error("name " + raw_name + " was not found in studentlist")
 
 
     def print_student(self):
