@@ -59,7 +59,7 @@ class Assignment(object):
                                     "points", "total_points", "crashes", "plagiarism", "notes", "grader",
                                     "done_tests", "done_comment", "done_grading", "feedback"]
         #                           "path_raw_dirname", "path_raw", "path_graded_dirname", "path_graded", "path_comment", "feedback"]
-        self.field_names = []
+        self.field_names = ["ID", "First name", "Last name", "Points total", "Perc average", "Perc total", "Remaining", "Status"]
 
         # tasks and points
         self.tasks = {}  # tasks with total points; format {task_nr: ("task_name", pnts, is_bonus), ...}
@@ -1623,7 +1623,7 @@ class Assignment(object):
 
         if not exists(self.path_results_file):  # create results.tsv
             with open(self.path_results_file, "w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=field_names_results, delimiter="\t")
+                writer = csv.DictWriter(f, fieldnames=self.field_names_results, delimiter="\t")
                 writer.writeheader()
             if not silent:
                 print("Created results.tsv")
@@ -1771,20 +1771,34 @@ class Assignment(object):
         # self.studentlist.tsv
         # for id in self.studentlist:
         #     print(str(self.studentlist[id]))
+
+        # append missing field names
+        field_names = self.field_names
+        for field_name in ["Points total", "Perc average", "Perc total", "Remaining", "Status"]:
+            if field_name not in field_names:
+                field_names.append(field_name)
+        if "ex_" + self.ex_nr + "_points" not in field_names:
+            field_names.append("ex_" +self.ex_nr + "_points")
+        if "ex_" + self.ex_nr + "_perc" not in field_names:
+            field_names.append("ex_" +self.ex_nr + "_perc")
+
         with open(self.path_studentlist_file, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=self.field_names, delimiter="\t")
+            writer = csv.DictWriter(f, fieldnames=field_names, delimiter="\t")
             writer.writeheader()
+
             # header rows
             for id in ["Total", "Average"]:
                 row = {"ID": id}
                 for key, value in self.studentlist[id].items():
-                    row[key] = self.studentlis[id][key]
+                    row[key] = self.studentlist[id][key]
+                row = {key: value for key, value in row.items() if key in field_names}
                 writer.writerow(row)
             # student rows
-            for id in sorted(self.studentlis)[:-2]:
+            for id in sorted(self.studentlist)[:-2]:
                 row = {"ID": id}
-                for key, value in self.studentlis[id].items():
-                    row[key] = self.studentlis[id][key]
+                for key, value in self.studentlist[id].items():
+                    row[key] = self.studentlist[id][key]
+                row = {key: value for key, value in row.items() if key in field_names}
                 writer.writerow(row)
         if not silent:
             helpers.print_success("Exported " + helpers.inflect(len(self.studentlis), "entries ") +
