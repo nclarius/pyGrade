@@ -55,7 +55,7 @@ class Assignment(object):
         self.view_only = False
         self.reload = False
         # field_names_results = vars(Student(self)).keys()  # field names for results file
-        self.field_names_results = ["id", "last_name", "first_name", "matr_nr", "moodle_id",
+        self.field_names_results = ["id", "last_name", "first_name",
                                     "points", "total_points", "crashes", "plagiarism", "notes", "grader",
                                     "done_tests", "done_comment", "done_grading", "feedback"]
         #                           "path_raw_dirname", "path_raw", "path_graded_dirname", "path_graded", "path_comment", "feedback"]
@@ -488,7 +488,7 @@ class Assignment(object):
 
         # set remaining variables
         if merge:  # take over data from existing entry
-            for field in ["last_name", "first_name", "matr_nr",
+            for field in ["last_name", "first_name",
                           "points", "total_points", "feedback", "grader", "done_tests", "done_comment", "done_grading"]:
                 setattr(s, field, getattr(self.students[self.s.id], field))
         else:  # initialize student
@@ -1633,7 +1633,7 @@ class Assignment(object):
                 reader = csv.DictReader(f, delimiter="\t")
                 for row in reader:
                     st = Student(self)
-                    for field in ["id", "last_name", "first_name", "matr_nr", "moodle_id",
+                    for field in ["id", "last_name", "first_name",
                                   "feedback", "grader", "notes", "crashes"]:
                         setattr(st, field, row[field])
                     for field in ["points", "total_points", "plagiarism", "done_tests", "done_comment", "done_grading"]:
@@ -1772,7 +1772,7 @@ class Assignment(object):
         # for id in self.studentlist:
         #     print(str(self.studentlist[id]))
         with open(self.path_studentlist_file, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=field_names, delimiter="\t")
+            writer = csv.DictWriter(f, fieldnames=self.field_names, delimiter="\t")
             writer.writeheader()
             # header rows
             for id in ["Total", "Average"]:
