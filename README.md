@@ -5,10 +5,10 @@ This tool can
   - automatically assign a point score based on unit tests  
   - compile feedback into a Moodle-compatible format.
   
- ![pyGrade -- submission overview](doc/img/pyGrade_1_.png)
+ ![pyGrade -- submission overview](doc/img/pyGrade_1.png)
  ![pyGrade -- test results](doc/img/pyGrade_2.png)
  ![pyGrade -- feedback](doc/img/pyGrade_3.png)
 
-At the moment, pyGrade is not publicly accessible. If you are interested, please contact me.
+pyGrade requires a specific setup of files for full functionality. Some demo input is provided in this repository. If you are interested in using the software, please contact me for further information.
 
-© Natalie Clarius \<<clarius@informatik.uni-tuebingen.de>\>  
+© 2018 - 2025 Natalie Clarius \<<natalie_clarius@yahoo.de>\>  
